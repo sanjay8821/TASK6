@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>GET THE COUNTRIES DETAILS</h1>
+    <div></div>
+    <script>
+        var http = new XMLHttpRequest();
+
+        http.open("GET","https://restcountries.com/v3.1/all");
+        http.send();
+    http.onload = ()=>{
+        if (http.status === 200){
+var restcountries =JSON.parse(http.response);
+const countriesinasia = restcountries.filter((country)=>{
+if (country.region === 'Asia'){
+return true;
+}
+});
+console.log("countries in asia:",countriesinasia)
+const fullpop = restcountries.filter((country) =>{
+    if (country.population < 200000){
+        return true;
+    }
+})
+console.log("population in all countries", fullpop)
+
+
+restcountries.forEach((country)=>{
+    console.log("Name:",country.name.official);
+    console.log("Capital:",country.capital);
+    console.log("Flag:",country.flag);
+})
+const totalpop = restcountries.reduce((acc,curr)=>{
+    return acc + curr.population;
+})
+console.log("total population:", totalpop)
+
+restcountries.forEach((country)=>{
+    let currencies= country.currencies&& Object.keys(country.currencies);
+    if (!!currencies&&currencies.includes("USD")){
+        console.log("country used usd:",country.name.common);
+    }
+})
+        }else{
+            console.log("error")
+
+        }
+    }
+    </script>
+    
+</body>
+</html>
